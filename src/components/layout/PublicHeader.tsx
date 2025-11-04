@@ -7,15 +7,15 @@ export default function PublicHeader() {
     <header className="sticky top-5 z-50">
     <Card className="m-5 rounded-full shadow-lg">
       <div className="flex container mx-auto justify-between pl-2">
-      <Link href="/" className="text-2xl font-bold text-sky-400 hover:opacity-80 ">
+      <Link href="/" className="text-2xl font-bold text-sky-400 hover:opacity-80 transition-opacity">
         TGU掲示板
       </Link>
       <div className="flex items-center gap-3">
         <Button variant="ghost" asChild>
-          <Link href="/login">Log in</Link>
+          <Link href="/auth/login">Log in</Link>
         </Button>
         <Button variant="default" asChild>
-          <Link href="/register">Sign up</Link>
+          <Link href="/auth/register">Sign up</Link>
         </Button>
       </div>
       </div>
