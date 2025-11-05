@@ -1,0 +1,32 @@
+import { getPost } from "@/features/posts/lib/post"
+import { notFound } from "next/navigation"
+
+type Params = {
+  // paramsは非同期に取得されるので Promise 型にしている
+  params: Promise<{ id: string }>;
+}
+
+export default async function PostDetailPage({ params }: Params) {
+  const {id} = await params
+  const post = await getPost(id)
+
+  if (!post) {
+    console.log("Post not found:", id)
+    notFound() 
+  }
+
+  return (
+      <article className="max-w-2xl mx-auto space-y-6">
+        <header>
+          <h1 className="text-3xl font-bold">{post.title}</h1>
+          <p className="text-sm text-muted-foreground">
+            {post.author.name}・{new Date(post.createdAt).toLocaleDateString("ja-JP")}
+          </p>
+        </header>
+
+        <section>
+          <p className="whitespace-pre-wrap leading-relaxed">{post.content}</p>
+        </section>
+      </article>
+  )
+}
