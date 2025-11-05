@@ -27,7 +27,7 @@ async function main(){
           {
             title: "Second Post",
             content: "これは2番目のブログ投稿です。",
-            published: false
+            published: true
           }
         ]
       }
