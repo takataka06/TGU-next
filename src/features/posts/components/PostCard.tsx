@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 
 export function PostCard({ post }: PostCardProps) {
   return (
-    <Link href={`/posts/${post.id}`} className="block">
+    <Link href={`/manage/posts/${post.id}`} className="block">
       <Card className="hover:shadow-md transition-shadow duration-200">
         <CardHeader>
           <CardTitle>{post.title}</CardTitle>
