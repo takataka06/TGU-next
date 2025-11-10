@@ -1,9 +1,7 @@
-import React from 'react'
+import RegisterForm from '@/features/users/components/RegisterForm'
 
-export default function page() {
+export default function RegisterPage() {
   return (
-    <div>
-      っっっっj
-    </div>
+      <RegisterForm />
   )
 }
