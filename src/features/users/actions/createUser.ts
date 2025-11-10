@@ -15,6 +15,7 @@ export async function createUser(
   prevState: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
+  
   //フォームから送信されたデータを取得
   const rawFormData = Object.fromEntries(
     ["name", "email", "password", "confirmPassword"].map(field => [
@@ -25,9 +26,11 @@ export async function createUser(
 
   //バリデーション
   const validationResult = registerSchema.safeParse(rawFormData);
+  console.log("rawFormData:", rawFormData);
 
   if (!validationResult.success) {
     return handleValidationErrors(validationResult.error);
+    
   }
 
   //DBにメールアドレスが保存されているか確認
@@ -45,7 +48,8 @@ export async function createUser(
       email: rawFormData.email,
       password: hashedPassword,
     }
-  });
+  }
+);
 
 
   //dashboardにリダイレクト
@@ -54,17 +58,18 @@ export async function createUser(
     ...Object.fromEntries(formData),
     redirect: false
   });
+  
   redirect('/dashboard');
-
 
 }
 
 //バリデーションエラー処理
 function handleValidationErrors(error: any): ActionState {
   // fieldErrorsは各フィールドごとのエラー、formErrorsはフォーム全体のエラー
-  const [fieldErrors, formErrors] = error.flatten();
+  const {fieldErrors, formErrors} = error.flatten();
   // zodの仕様でパスワード一致エラーはformErrorsに入るため、手動でfieldErrorsに追加
   if (formErrors.length > 0) {
+    
     return { success: false, errors: { ...fieldErrors, confirmPassword: formErrors } };
   }
   return { success: false, errors: fieldErrors };
