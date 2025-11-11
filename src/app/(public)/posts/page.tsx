@@ -1,4 +1,4 @@
-import { PostCard } from "@/features/posts/components/PostCard"
+import  PostCard  from "@/features/posts/components/PostCard"
 import { getPosts } from "@/features/posts/lib/post"
 
 export default async function PostPage() {

@@ -2,7 +2,7 @@ import { PostCardProps } from "../types/post"
 import Link from "next/link"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 
-export function PostCard({ post }: PostCardProps) {
+export default function PostCard({ post }: PostCardProps) {
   return (
     <Link href={`/manage/posts/${post.id}`} className="block">
       <Card className="hover:shadow-md transition-shadow duration-200">
