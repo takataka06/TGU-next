@@ -9,6 +9,8 @@ import {
 import { signOut } from "@/auth"
 import { Button } from "@/components/ui/button"
 import { Session } from "next-auth"
+import { User } from 'lucide-react';
+import Link from "next/link";
 
 export default function Setting({ session }: { session: Session }) {
   const handleLogout = async () => {
@@ -20,17 +22,16 @@ export default function Setting({ session }: { session: Session }) {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="default">
-            {session.user?.name}
-          </Button>
+          <User/>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel>{session.user?.name}</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Billing</DropdownMenuItem>
-          <DropdownMenuItem>Team</DropdownMenuItem>
-          <DropdownMenuItem  className="cursor-pointer" onClick={handleLogout}>Logout</DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href="/manage/posts/new">新規投稿</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>設定</DropdownMenuItem>
+          <DropdownMenuItem  className="cursor-pointer" onClick={handleLogout}>ログアウト</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </>
