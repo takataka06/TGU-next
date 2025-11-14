@@ -2,6 +2,7 @@ import type { NextAuthConfig } from 'next-auth';
  
 // ページ遷移や認可処理の設定を行う
 export const authConfig = {
+  // ログインページのパスを指定
   pages: {
     signIn: '/auth/login',
   },
@@ -18,5 +19,5 @@ export const authConfig = {
       return true;
     },
   },
-  providers: [], // Add providers with an empty array for now
+  providers: [], // プロバイダーはここに追加
 } satisfies NextAuthConfig;

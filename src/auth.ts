@@ -13,9 +13,11 @@ async  function getUser(email:string){
   })
 }
 
-
+// sessionを取得するときはここを通る
 export const { auth, signIn, signOut,handlers } = NextAuth({
+  // 画面遷移や認可処理の設定をインポートして展開
   ...authConfig,
+  // 認証プロバイダーの設定
   providers: [
     Credentials({
       async authorize(credentials) {
@@ -33,5 +35,16 @@ export const { auth, signIn, signOut,handlers } = NextAuth({
       },
     }),
   ],
+  // ユーザーを
+  callbacks: {
+    async session({ session, token }) {
+      if (session.user){
+        session.user.id = (token.id || token.sub || '') as string;
+        session.user.name = token.name ?? '';
+        session.user.email = token.email ?? '';
+      }
+      return session;
+    }
+  },
 });
 
