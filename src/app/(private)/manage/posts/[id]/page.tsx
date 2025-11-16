@@ -1,6 +1,7 @@
 import PostSetting from "@/features/posts/components/PostSetting";
 import { getPost } from "@/features/posts/lib/post"
 import { notFound } from "next/navigation"
+import { auth } from "@/auth";
 
 type Params = {
   // paramsは非同期に取得されるので Promise 型にしている
@@ -8,8 +9,12 @@ type Params = {
 }
 
 export default async function PostDetailPage({ params }: Params) {
+  const session = await auth()
+  const userId = session?.user?.id
   const {id} = await params
   const post = await getPost(id)
+
+
 
   if (!post) {
     console.log("Post not found:", id)
@@ -23,7 +28,9 @@ export default async function PostDetailPage({ params }: Params) {
           <p className="text-sm text-muted-foreground">
             {post.author.name}・{new Date(post.createdAt).toLocaleDateString("ja-JP")}
           </p>
-          <PostSetting postId={post.id}/>
+          {post.authorId === userId && (
+          <PostSetting postId={post.id} />
+        )}
         </div>
 
         <section>
