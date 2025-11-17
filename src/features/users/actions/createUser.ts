@@ -64,7 +64,7 @@ export async function createUser(
   // フラッシュメッセージをセット
   await setFlash({
     type: "success",
-    message: "投稿を削除しました。",
+    message: "アカウントを作成しました。",
   });
   revalidatePath("/dashboard");
 
