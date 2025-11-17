@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useActionState } from 'react';
-import { authenticate } from '@/lib/actions/authenticate';
+import { authenticate } from '@/features/users/actions/authenticate';
 
 export default function LoginForm() {
   const [errorMessage, formAction, isPending] = useActionState(

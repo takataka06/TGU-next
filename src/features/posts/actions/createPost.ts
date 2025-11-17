@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { postSchema } from "../lib/postvalidation";
 import { auth } from "@/auth";
+import { setFlash } from "@/lib/flash-toaster";
+import { revalidatePath } from "next/cache";
 
 type ActionState = {
   success: boolean,
@@ -19,7 +21,7 @@ export async function createPost(
 
   //　バリデーション
   // safeParse関数はvalidationResultがあるならsuccessにtrueを返す
-  const validationResult = postSchema.safeParse({ title, content});
+  const validationResult = postSchema.safeParse({ title, content });
   if (!validationResult.success) {
     return {
       success: false, errors: validationResult.error.flatten().fieldErrors
@@ -42,9 +44,12 @@ export async function createPost(
   })
 
 
-
+  await setFlash({
+    type: "success",
+    message: "新規投稿に成功しました。",
+  });
   // 投稿一覧ページにリダイレクト
+  revalidatePath("/dashboard");
   redirect("/dashboard");
-  
 
 }

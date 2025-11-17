@@ -1,3 +1,4 @@
+"use client";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,17 +7,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { signOut } from "@/auth"
-import { Button } from "@/components/ui/button"
+import { logout } from "@/features/users/actions/logout";
 import { Session } from "next-auth"
 import { User } from 'lucide-react';
 import Link from "next/link";
 
 export default function Setting({ session }: { session: Session }) {
-  const handleLogout = async () => {
-    "use server";
-    await signOut();
-  }
 
   return (
     <>
@@ -31,7 +27,7 @@ export default function Setting({ session }: { session: Session }) {
             <Link href="/manage/posts/new">新規投稿</Link>
           </DropdownMenuItem>
           <DropdownMenuItem>設定</DropdownMenuItem>
-          <DropdownMenuItem  className="cursor-pointer" onClick={handleLogout}>ログアウト</DropdownMenuItem>
+          <DropdownMenuItem  className="cursor-pointer" onClick={logout}>ログアウト</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </>

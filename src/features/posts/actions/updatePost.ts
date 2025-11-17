@@ -2,6 +2,8 @@
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { postSchema } from "../lib/postvalidation";
+import { revalidatePath } from "next/cache";
+import { setFlash } from "@/lib/flash-toaster";
 
 type ActionState = {
   success: boolean,
@@ -19,7 +21,7 @@ export async function updatePost(
 
   //　バリデーション
   // safeParse関数はvalidationResultがあるならsuccessにtrueを返す
-  const validationResult = postSchema.safeParse({ title, content});
+  const validationResult = postSchema.safeParse({ title, content });
   if (!validationResult.success) {
     return {
       success: false, errors: validationResult.error.flatten().fieldErrors
@@ -28,18 +30,24 @@ export async function updatePost(
 
   // DBに保存
   await prisma.post.update({
-    where: {id: postId},
+    where: { id: postId },
     data: {
       title,
       content,
       published: true,
     }
   })
+  // フラッシュメッセージをセット
+  await setFlash({
+    type: "success",
+    message: "投稿を更新しました。",
+  });
 
 
 
   // 投稿一覧ページにリダイレクト
+  revalidatePath("/dashboard");
   redirect("/dashboard");
-  
+
 
 }

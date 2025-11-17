@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma";
 import bcryptjs from "bcryptjs";
 import { signIn } from "@/auth";
 import { redirect } from "next/navigation";
+import { setFlash } from "@/lib/flash-toaster";
+import { revalidatePath } from "next/cache";
 
 type ActionState = {
   success: boolean;
@@ -15,7 +17,7 @@ export async function createUser(
   prevState: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  
+
   //フォームから送信されたデータを取得
   const rawFormData = Object.fromEntries(
     ["name", "email", "password", "confirmPassword"].map(field => [
@@ -30,7 +32,7 @@ export async function createUser(
 
   if (!validationResult.success) {
     return handleValidationErrors(validationResult.error);
-    
+
   }
 
   //DBにメールアドレスが保存されているか確認
@@ -49,7 +51,7 @@ export async function createUser(
       password: hashedPassword,
     }
   }
-);
+  );
 
 
   //dashboardにリダイレクト
@@ -58,7 +60,15 @@ export async function createUser(
     ...Object.fromEntries(formData),
     redirect: false
   });
-  
+
+  // フラッシュメッセージをセット
+  await setFlash({
+    type: "success",
+    message: "投稿を削除しました。",
+  });
+  revalidatePath("/dashboard");
+
+
   redirect('/dashboard');
 
 }
@@ -66,10 +76,10 @@ export async function createUser(
 //バリデーションエラー処理
 function handleValidationErrors(error: any): ActionState {
   // fieldErrorsは各フィールドごとのエラー、formErrorsはフォーム全体のエラー
-  const {fieldErrors, formErrors} = error.flatten();
+  const { fieldErrors, formErrors } = error.flatten();
   // zodの仕様でパスワード一致エラーはformErrorsに入るため、手動でfieldErrorsに追加
   if (formErrors.length > 0) {
-    
+
     return { success: false, errors: { ...fieldErrors, confirmPassword: formErrors } };
   }
   return { success: false, errors: fieldErrors };

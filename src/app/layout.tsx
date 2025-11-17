@@ -1,3 +1,4 @@
+import { FlashToaster } from "@/lib/flash-toaster";
 import "./globals.css";
 
 
@@ -10,6 +11,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {children}
+        <FlashToaster />
       </body>
     </html>
   );

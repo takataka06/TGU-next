@@ -1,7 +1,9 @@
 'use server';
  
 import { signIn } from '@/auth';
+import { setFlash } from '@/lib/flash-toaster';
 import { AuthError } from 'next-auth';
+import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
  
 // ...
@@ -16,6 +18,13 @@ export async function authenticate(
       ...Object.fromEntries(formData),
       redirect: false
     });
+    // フラッシュメッセージをセット
+    await setFlash({
+      type: "success",
+      message: "ログインしました。",
+    });
+    // /dashboard の RSC 再レンダリング
+    revalidatePath("/dashboard");
     redirect('/dashboard');
   } catch (error) {
     if (error instanceof AuthError) {
