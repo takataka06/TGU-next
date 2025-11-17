@@ -12,7 +12,6 @@ export async function logout() {
     type: "success",
     message: "ログアウトしました。",
   });
-  console.log("Logged out"); // デバッグ用ログ
   revalidatePath("/dashboard");
   redirect("/dashboard");
 }
