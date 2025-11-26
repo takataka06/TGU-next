@@ -1,4 +1,4 @@
-import  PrivateHeader  from '@/components/layout/PrivateHeader'
+import PrivateHeader from '@/components/layout/PrivateHeader';
 
 export default function Privatelayout({
   children,
@@ -10,5 +10,5 @@ export default function Privatelayout({
       <PrivateHeader />
       {children}
     </>
-  )
+  );
 }

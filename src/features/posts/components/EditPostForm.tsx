@@ -1,7 +1,7 @@
-"use client"
-import { useState, useActionState } from "react";
-import Link from "next/link";
-import { updatePost } from "../actions/updatePost";
+'use client';
+import { useState, useActionState } from 'react';
+import Link from 'next/link';
+import { updatePost } from '../actions/updatePost';
 
 type EditPostFormProps = {
   post: {
@@ -10,58 +10,64 @@ type EditPostFormProps = {
     content: string;
     published: boolean;
   };
-  }
+};
 
-export default function EditPostForm({post}:EditPostFormProps) {
+export default function EditPostForm({ post }: EditPostFormProps) {
   const [title, setTitle] = useState(post.title);
   const [content, setContent] = useState(post.content);
-  const [state, formAction] = useActionState(
-    updatePost,
-    { success: false, errors: {} }
-  )
+  const [state, formAction] = useActionState(updatePost, { success: false, errors: {} });
   return (
     <>
-      <header className="w-full  pb-2 mb-10 flex justify-center items-center">
-        <Link href={`/manage/posts/${post.id}`} className="absolute left-5 hover:opacity-40 transition-opacity">⇦一覧詳細に戻る</Link>
-        <h1 className="text-xl text-mono ">投稿編集</h1>
+      <header className="mb-10 flex w-full items-center justify-center pb-2">
+        <Link
+          href={`/manage/posts/${post.id}`}
+          className="absolute left-5 transition-opacity hover:opacity-40"
+        >
+          ⇦一覧詳細に戻る
+        </Link>
+        <h1 className="text-mono text-xl">投稿編集</h1>
       </header>
       <div className="container mx-auto">
         <form action={formAction} className="space-y-4">
           <div>
-            <label htmlFor="title" className="block font-medium mb-1">タイトル</label>
+            <label htmlFor="title" className="mb-1 block font-medium">
+              タイトル
+            </label>
             <input
               type="text"
               id="title"
               name="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2"
+              className="w-full rounded border border-gray-300 px-3 py-2"
               required
             />
             {/*  stateにはバリデーションエラーが入っているので表示する */}
             {state.errors.title && (
-              <p className="text-sm text-red-500">{state.errors.title.join(",")}</p>
+              <p className="text-sm text-red-500">{state.errors.title.join(',')}</p>
             )}
           </div>
           <div>
-            <label htmlFor="content" className="block font-medium mb-1">内容</label>
+            <label htmlFor="content" className="mb-1 block font-medium">
+              内容
+            </label>
             <textarea
               id="content"
               name="content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
               rows={10}
-              className="w-full border border-gray-300 rounded px-3 py-2"
+              className="w-full rounded border border-gray-300 px-3 py-2"
               required
             ></textarea>
           </div>
           {state.errors.content && (
-              <p className="text-sm text-red-500">{state.errors.content.join(",")}</p>
-            )}
+            <p className="text-sm text-red-500">{state.errors.content.join(',')}</p>
+          )}
           <div>
             <button
               type="submit"
-              className="bg-sky-500 text-white px-4 py-2 rounded-full hover:bg-sky-300 transition-colors"
+              className="rounded-full bg-sky-500 px-4 py-2 text-white transition-colors hover:bg-sky-300"
             >
               更新する
             </button>
@@ -70,5 +76,5 @@ export default function EditPostForm({post}:EditPostFormProps) {
         </form>
       </div>
     </>
-  )
+  );
 }

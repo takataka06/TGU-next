@@ -7,17 +7,16 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { deletePost } from "../actions/deletePost"
-
+} from '@/components/ui/alert-dialog';
+import { deletePost } from '../actions/deletePost';
 
 type DeletePostProps = {
   postId: string;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-}
+};
 
-export default function DeletePostDialog({postId, isOpen, onOpenChange}:DeletePostProps) {
+export default function DeletePostDialog({ postId, isOpen, onOpenChange }: DeletePostProps) {
   return (
     <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
       <AlertDialogContent>
@@ -33,5 +32,5 @@ export default function DeletePostDialog({postId, isOpen, onOpenChange}:DeletePo
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
+  );
 }
