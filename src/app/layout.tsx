@@ -1,6 +1,5 @@
-import { FlashToaster } from "@/lib/flash-toaster";
-import "./globals.css";
-
+import { FlashToaster } from '@/lib/flash-toaster';
+import './globals.css';
 
 export default function RootLayout({
   children,

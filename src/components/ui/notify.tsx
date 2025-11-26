@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { ReactNode, useEffect } from "react";
-import { toast } from "sonner";
+import { ReactNode, useEffect } from 'react';
+import { toast } from 'sonner';
 
 export function Notify({
   children,
@@ -12,7 +12,7 @@ export function Notify({
 }) {
   useEffect(() => {
     if (isSuccessDeletePost) {
-      toast.success("投稿が削除されました。");
+      toast.success('投稿が削除されました。');
     }
   });
 

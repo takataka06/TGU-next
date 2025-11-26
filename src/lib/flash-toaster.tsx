@@ -1,21 +1,21 @@
-import { Toaster } from "@/components/ui/sonner";
-import { cookies } from "next/headers";
-import { FlashToasterClient } from "./flash-toaster-client";
+import { Toaster } from '@/components/ui/sonner';
+import { cookies } from 'next/headers';
+import { FlashToasterClient } from './flash-toaster-client';
 
 export type Flash = {
-  type: "success" | "error";
+  type: 'success' | 'error';
   message: string;
 };
 
 export async function setFlash(flash: Flash) {
-  (await cookies()).set("flash", JSON.stringify(flash), {
-    path: "/", 
+  (await cookies()).set('flash', JSON.stringify(flash), {
+    path: '/',
     maxAge: 0, // cookieの有効期限(秒)
   });
 }
 
 export async function FlashToaster() {
-  const flash = (await cookies()).get("flash");
+  const flash = (await cookies()).get('flash');
 
   return (
     // flashの値にはCRUD操作後のメッセージが入る想定

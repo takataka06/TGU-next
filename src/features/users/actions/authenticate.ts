@@ -1,30 +1,27 @@
 'use server';
- 
+
 import { signIn } from '@/auth';
 import { setFlash } from '@/lib/flash-toaster';
 import { AuthError } from 'next-auth';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
- 
+
 // ...
- 
-export async function authenticate(
-  prevState: string | undefined,
-  formData: FormData,
-) {
+
+export async function authenticate(prevState: string | undefined, formData: FormData) {
   try {
     await signIn('credentials', {
       // フォームの値を JavaScript の普通のオブジェクトに変換して渡す
       ...Object.fromEntries(formData),
-      redirect: false
+      redirect: false,
     });
     // フラッシュメッセージをセット
     await setFlash({
-      type: "success",
-      message: "ログインしました。",
+      type: 'success',
+      message: 'ログインしました。',
     });
     // /dashboard の RSC 再レンダリング
-    revalidatePath("/dashboard");
+    revalidatePath('/dashboard');
     redirect('/dashboard');
   } catch (error) {
     if (error instanceof AuthError) {
@@ -39,6 +36,5 @@ export async function authenticate(
     throw error;
   }
 }
-
 
 // ログイン処理を実行するサーバーアクション

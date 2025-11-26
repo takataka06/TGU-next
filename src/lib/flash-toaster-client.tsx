@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import { ReactNode, useEffect } from "react";
-import { toast } from "sonner";
-import type { Flash } from "@/lib/flash-toaster";
+import { ReactNode, useEffect } from 'react';
+import { toast } from 'sonner';
+import type { Flash } from '@/lib/flash-toaster';
 
 export function FlashToasterClient({
   flash,
   children, // childrenにはtoasterコンポーネントが入る
 }: {
   flash: string | undefined;
-  children: ReactNode; 
+  children: ReactNode;
 }) {
   useEffect(() => {
     if (!!flash) {
       const data: Flash = JSON.parse(flash);
       switch (data.type) {
-        case "success":
+        case 'success':
           toast.success(data.message);
           break;
-        case "error":
+        case 'error':
           toast.error(data.message);
           break;
         default:
