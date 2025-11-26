@@ -9,8 +9,8 @@ export type Flash = {
 
 export async function setFlash(flash: Flash) {
   (await cookies()).set("flash", JSON.stringify(flash), {
-    path: "/",
-    maxAge: 0,
+    path: "/", 
+    maxAge: 0, // cookieの有効期限(秒)
   });
 }
 

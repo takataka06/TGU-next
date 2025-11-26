@@ -1,6 +1,7 @@
 import { PostCardProps } from "../types/post"
 import Link from "next/link"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent,CardFooter } from "@/components/ui/card"
+import LikeButton from "./LikeButton"
 
 export default function PostCard({ post }: PostCardProps) {
   return (
@@ -15,7 +16,15 @@ export default function PostCard({ post }: PostCardProps) {
         <CardContent>
           <p className="text-sm text-muted-foreground line-clamp-1">{post.content}</p>
         </CardContent>
+        <CardFooter className="pt-0">
+          <LikeButton
+            postId={post.id}
+            initialLiked={post.likedByMe}
+            initialLikeCount={post.likeCount}
+          />
+        </CardFooter>
       </Card>
     </Link>
+
   )
 }

@@ -35,7 +35,7 @@ export const { auth, signIn, signOut,handlers } = NextAuth({
       },
     }),
   ],
-  // ユーザーを
+  
   callbacks: {
     async session({ session, token }) {
       if (session.user){
