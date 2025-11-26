@@ -7,6 +7,8 @@ export type Post = {
   author: {
     name:string;
   }
+  likedByMe:boolean;
+  likeCount:number;
 }
 
 // PostCardProps は Reactコンポーネントの「引数の型」 を定義してる

@@ -74,7 +74,7 @@ export async function createUser(
 }
 
 //バリデーションエラー処理
-function handleValidationErrors(error: any): ActionState {
+function handleValidationErrors(error:any): ActionState {
   // fieldErrorsは各フィールドごとのエラー、formErrorsはフォーム全体のエラー
   const { fieldErrors, formErrors } = error.flatten();
   // zodの仕様でパスワード一致エラーはformErrorsに入るため、手動でfieldErrorsに追加
