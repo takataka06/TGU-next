@@ -46,3 +46,4 @@ https://tgu-next.vercel.app/
 - Route Handlers を用いてサーバー処理を Next.js 内に統合
 - いいね機能に Optimistic UI を採用
 - ESLint Prettier によるコード品質の統一
+- Bullet-proofを用いたディレクトリ設計
