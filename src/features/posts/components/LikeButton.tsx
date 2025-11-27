@@ -16,29 +16,33 @@ export default function LikeButton({ postId, initialLiked, initialLikeCount }: L
 
   const handleLike = async (e: React.MouseEvent) => {
     e.preventDefault();
-    e.stopPropagation();
+    e.stopPropagation(); // 親要素へのイベント伝播を防止 
 
     setIsLoading(true);
 
     try {
       if (isLiked) {
+        setIsLiked(false);
         const res = await fetch(`/api/likes/${postId}`, {
           method: 'DELETE',
         });
         if (res.ok) {
-          setIsLiked(false);
           setLikeCount((prev) => prev - 1);
+        } else {
+          setIsLiked(true);
         }
       } else {
+        setIsLiked(true);
         const res = await fetch(`/api/likes/${postId}`, {
           method: 'POST',
         });
         if (res.ok) {
-          setIsLiked(true);
           setLikeCount((prev) => prev + 1);
+        } else {
+          setIsLiked(false);
         }
       }
-    } catch (error) {
+    } catch (error) { 
       console.error('いいね処理に失敗しました', error);
     } finally {
       setIsLoading(false);

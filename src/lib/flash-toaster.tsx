@@ -1,6 +1,6 @@
 import { Toaster } from '@/components/ui/sonner';
 import { cookies } from 'next/headers';
-import { FlashToasterClient } from './flash-toaster-client';
+import { FlashToasterClient } from '../components/layout/flash-toaster-client';
 
 export type Flash = {
   type: 'success' | 'error';
@@ -10,7 +10,7 @@ export type Flash = {
 export async function setFlash(flash: Flash) {
   (await cookies()).set('flash', JSON.stringify(flash), {
     path: '/',
-    maxAge: 0, // cookieの有効期限(秒)
+    maxAge: 0, // cookieの有効期限
   });
 }
 
