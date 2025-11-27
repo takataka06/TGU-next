@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TGU掲示板アプリ(最新)
 
-## Getting Started
+## 1.アプリの概要と動機
+元の Rails 版は以下のリポジトリにあります
+https://github.com/takataka06/TGU-
 
-First, run the development server:
+移行理由は以下の通りです。
+- Next.js の方が UI コンポーネント設計や状態管理がシンプル
+- SEO が必要な掲示板アプリとの相性が良い（App Router + RSC）
+- 実務寄りのスタックに触れる学習目的
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+  
+## 2.アプリ利用方法
+こちらのurlにアクセスすることで利用できます。
+https://tgu-next.vercel.app/
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
+## 3.使用技術と選定理由
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Category       | Technology Stack                                     |
+| -------------- | ---------------------------------------------------- |
+| Frontend       | Next.js(16.0.1),TypeScript Tailwind(3.3.1)           |
+| Backend        | Next.js(Route Handlers / Server Actions）                                           |
+| Infrastructure | Vercel Supabase(db)                                  |
+| Database       | PostgreSQL                                           |
+| UI library     | Shadcn(UIコンポーネント) lucide-react(アイコン)          |
+| library        | auth.js(認証認可) zod(バリデーション) prisma(ORM)        |
+| etc.           | ESLint, Prettier                                     |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+<br>
+---
 
-## Learn More
+## 4. 機能一覧
 
-To learn more about Next.js, take a look at the following resources:
+- ユーザー登録 / ログイン / ログアウト (auth.jsを使用)
+- 投稿のCRUD機能
+- バリデーション(zod)
+- 操作ごとのフラッシュメッセージ
+- ログイン中ユーザーのみ操作可能な認可
+- 投稿へのいいね機能
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 5. こだわった点
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- フラッシュメッセージを Cookie ベースで実装し、props リレーを排除
+- Server Actions、RSC を積極的に活用し、API 層を最小化
+- Route Handlers を用いてサーバー処理を Next.js 内に統合
+- いいね機能に Optimistic UI を採用
+- ESLint Prettier によるコード品質の統一
