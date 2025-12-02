@@ -28,9 +28,12 @@ https://tgu-next.vercel.app/
 | etc.           | ESLint, Prettier                                     |
 
 <br>
----
 
-## 4. 機能一覧
+## 4.DB設計・ER図
+
+準備中....
+
+## 5. 機能一覧
 
 - ユーザー登録 / ログイン / ログアウト (auth.jsを使用)
 - 投稿のCRUD機能
@@ -39,7 +42,7 @@ https://tgu-next.vercel.app/
 - ログイン中ユーザーのみ操作可能な認可
 - 投稿へのいいね機能
 
-## 5. こだわった点
+## 6. こだわった点
 
 - フラッシュメッセージを Cookie ベースで実装し、props リレーを排除
 - Server Actions、RSC を積極的に活用し、API 層を最小化
