@@ -15,7 +15,7 @@ https://github.com/takataka06/TGU-
 https://tgu-next.vercel.app/
 
 ---
-## 3.使用技術と選定理由
+## 3.使用技術
 
 | Category       | Technology Stack                                     |
 | -------------- | ---------------------------------------------------- |
