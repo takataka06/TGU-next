@@ -32,6 +32,9 @@ https://tgu-next.vercel.app/
 ## 4.DB設計・ER図
 
 準備中....
+ER図
+
+<img width="667" height="423" alt="Image" src="https://github.com/user-attachments/assets/298db3c6-92d0-437f-a1f2-f1e7f3611d36" />
 
 ## 5. 機能一覧
 
