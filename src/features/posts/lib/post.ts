@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
-import { getPostsFromDb } from './repositories/postrepositories';
+import { getPostsFromDb } from './repositories/postRepositories';
 
 // 投稿一覧(ユーザー名、like数、like済みかどうかを含む)を降順で取得する関数
 export async function getPosts() {
@@ -8,7 +8,7 @@ export async function getPosts() {
   const userId = session?.user?.id;
   // prisma操作のロジックはrepositoryに集約
   const rawPosts = await getPostsFromDb(userId);
-  
+
   return rawPosts.map((post) => ({
     ...post,
     likeCount: post._count.likes,
