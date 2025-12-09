@@ -6,13 +6,5 @@ export async function getOwnPost(userId: string, postId: string) {
       id: postId,
       authorId: userId,
     },
-    select: {
-      id: true,
-      title: true,
-      content: true,
-      published: true,
-      createdAt: true,
-      updatedAt: true,
-    },
   });
 }
