@@ -2,6 +2,9 @@ import PostSetting from '@/features/posts/components/PostSetting';
 import { getPost } from '@/features/posts/lib/post';
 import { notFound } from 'next/navigation';
 import { auth } from '@/auth';
+import CommentSection from '@/features/posts/components/CommentSection';
+import { getComments } from '@/features/posts/lib/getComments';
+import CommentForm from '@/features/posts/components/CommentForm';
 
 type Params = {
   // paramsは非同期に取得されるので Promise 型にしている
@@ -18,6 +21,7 @@ export default async function PostDetailPage({ params }: Params) {
     console.log('Post not found:', id);
     notFound();
   }
+  const comments = await getComments(post.id);
 
   return (
     <div className="mx-auto max-w-2xl space-y-3">
@@ -32,6 +36,8 @@ export default async function PostDetailPage({ params }: Params) {
       <section>
         <p className="leading-relaxed whitespace-pre-wrap">{post.content}</p>
       </section>
+      <CommentSection comments={comments} />
+      <CommentForm postId={post.id} />
     </div>
   );
 }
