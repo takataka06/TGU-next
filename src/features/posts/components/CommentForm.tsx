@@ -1,10 +1,10 @@
-"use client"; 
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function CommentForm({ postId }: { postId: string }) {
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
@@ -13,22 +13,21 @@ export default function CommentForm({ postId }: { postId: string }) {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch("/api/comments", {
-        method: "POST",
+      const res = await fetch('/api/comments', {
+        method: 'POST',
         body: JSON.stringify({ content, postId }),
-        headers: { "Content-Type": "application/json" },
+        headers: { 'Content-Type': 'application/json' },
       });
 
-      if (!res.ok) throw new Error("送信失敗");
+      if (!res.ok) throw new Error('送信失敗');
 
       // 成功したらフォームを空にする
-      setContent("");
-      
+      setContent('');
+
       // 現在のページを再取得して、コメント一覧を更新する
-      router.refresh(); 
-      
+      router.refresh();
     } catch (error) {
-      alert("コメントできませんでした");
+      alert('コメントできませんでした');
     } finally {
       setIsSubmitting(false);
     }
@@ -37,18 +36,18 @@ export default function CommentForm({ postId }: { postId: string }) {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-2">
       <textarea
-        className="border p-2 rounded w-full"
+        className="w-full rounded border p-2"
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder="コメントを書く..."
         disabled={isSubmitting}
       />
-      <button 
-        type="submit" 
-        className="bg-sky-500 text-white px-4 py-2 rounded-full self-end disabled:opacity-50"
+      <button
+        type="submit"
+        className="self-end rounded-full bg-sky-500 px-4 py-2 text-white disabled:opacity-50"
         disabled={isSubmitting}
       >
-        {isSubmitting ? "送信中..." : "コメントする"}
+        {isSubmitting ? '送信中...' : 'コメントする'}
       </button>
     </form>
   );

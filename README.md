@@ -1,31 +1,34 @@
 # TGU掲示板アプリ(最新)
 
 ## 1.アプリの概要と動機
+
 元の Rails 版は以下のリポジトリにあります
 https://github.com/takataka06/TGU-
 
 移行理由は以下の通りです。
+
 - Next.js の方が UI コンポーネント設計や状態管理がシンプル
 - SEO が必要な掲示板アプリとの相性が良い（App Router + RSC）
 - 実務寄りのスタックに触れる学習目的
 
-  
 ## 2.アプリ利用方法
+
 こちらのurlにアクセスすることで利用できます。
 https://tgu-next.vercel.app/
 
 ---
+
 ## 3.使用技術
 
-| Category       | Technology Stack                                     |
-| -------------- | ---------------------------------------------------- |
-| Frontend       | Next.js(16.0.1),TypeScript Tailwind(3.3.1)           |
-| Backend        | Next.js(Route Handlers / Server Actions）                                           |
-| Infrastructure | Vercel Supabase(db)                                  |
-| Database       | PostgreSQL                                           |
-| UI library     | Shadcn(UIコンポーネント) lucide-react(アイコン)          |
-| library        | auth.js(認証認可) zod(バリデーション) prisma(ORM)        |
-| etc.           | ESLint, Prettier                                     |
+| Category       | Technology Stack                                  |
+| -------------- | ------------------------------------------------- |
+| Frontend       | Next.js(16.0.1),TypeScript Tailwind(3.3.1)        |
+| Backend        | Next.js(Route Handlers / Server Actions）         |
+| Infrastructure | Vercel Supabase(db)                               |
+| Database       | PostgreSQL                                        |
+| UI library     | Shadcn(UIコンポーネント) lucide-react(アイコン)   |
+| library        | auth.js(認証認可) zod(バリデーション) prisma(ORM) |
+| etc.           | ESLint, Prettier                                  |
 
 <br>
 

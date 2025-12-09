@@ -16,7 +16,7 @@ export default function LikeButton({ postId, initialLiked, initialLikeCount }: L
 
   const handleLike = async (e: React.MouseEvent) => {
     e.preventDefault();
-    e.stopPropagation(); // 親要素へのイベント伝播を防止 
+    e.stopPropagation(); // 親要素へのイベント伝播を防止
 
     setIsLoading(true);
 
@@ -42,7 +42,7 @@ export default function LikeButton({ postId, initialLiked, initialLikeCount }: L
           setIsLiked(false);
         }
       }
-    } catch (error) { 
+    } catch (error) {
       console.error('いいね処理に失敗しました', error);
     } finally {
       setIsLoading(false);
