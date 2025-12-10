@@ -12,6 +12,7 @@ export type Post = {
 };
 
 // PostCardProps は Reactコンポーネントの「引数の型」 を定義してる
+// これをやらなければ{post}: {post: Post} のように毎回書く必要がある
 export type PostCardProps = {
   post: Post;
 };

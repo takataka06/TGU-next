@@ -8,3 +8,14 @@ export async function getOwnPost(userId: string, postId: string) {
     },
   });
 }
+
+export async function getOwnPosts(userId: string) {
+  return await prisma.post.findMany({
+    where: {
+      authorId: userId,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+}

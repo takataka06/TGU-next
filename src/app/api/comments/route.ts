@@ -34,3 +34,32 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Internal Error' }, { status: 500 });
   }
 }
+
+
+// DELETE /api/comments?id=コメントID
+export async function DELETE(req: Request) {
+  const session = await auth();
+  if (!session?.user?.id) return NextResponse.json({ error: "Auth required" }, { status: 401 });
+
+  // クエリパラメータからコメントIDを取得
+  const { searchParams } = new URL(req.url);
+  // キーの値を取得
+  const commentId = searchParams.get('id');
+  if (!commentId) {
+    return NextResponse.json({ error: "コメントIDが必要です" }, { status: 400 });
+  }
+
+  // deleteManyを使うことで二つの条件を満たす場合のみ削除できる
+  const result = await prisma.comment.deleteMany({
+    where: {
+      id: commentId,
+      userId: session.user.id, 
+    },
+  });
+
+  if (result.count === 0) {
+    return NextResponse.json({ error: "削除できませんでした" }, { status: 403 });
+  }
+
+  return NextResponse.json({ success: true });
+}

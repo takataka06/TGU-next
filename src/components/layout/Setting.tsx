@@ -25,7 +25,9 @@ export default function Setting({ session }: { session: Session }) {
           <DropdownMenuItem asChild>
             <Link href="/manage/posts/new">新規投稿</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>設定</DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link href={`/users/${session.user?.id}`}>プロフィール設定</Link>
+          </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer" onClick={logout}>
             ログアウト
           </DropdownMenuItem>

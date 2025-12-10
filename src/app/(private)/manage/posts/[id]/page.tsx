@@ -36,8 +36,9 @@ export default async function PostDetailPage({ params }: Params) {
       <section>
         <p className="leading-relaxed whitespace-pre-wrap">{post.content}</p>
       </section>
-      <CommentSection comments={comments} />
+      <CommentSection comments={comments} currentUserId={session?.user?.id}/>
       <CommentForm postId={post.id} />
+
     </div>
   );
 }
