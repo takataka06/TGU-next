@@ -41,7 +41,8 @@ export default function CommentSection({ comments, currentUserId }: { comments: 
         {comments.map((comment) => (
           <div key={comment.id} className="rounded border bg-gray-50 p-4">
             <div className="text-sm font-bold">{comment.user.name}</div>
-            <p>{comment.content}</p>
+            <div className='flex items-cneter justify-between'>
+            <p className='pt-2'>{comment.content}</p>
             {currentUserId === comment.userId && (
               <button
                 className="mt-2 px-3 py-1 bg-red-500 text-white rounded-full hover:bg-red-600"
@@ -51,6 +52,7 @@ export default function CommentSection({ comments, currentUserId }: { comments: 
                 {isDeleting ? '削除中...' : '削除'}
               </button>
             )}
+            </div>
           </div>
         ))}
       </div>

@@ -1,5 +1,7 @@
 import Avatar from "boring-avatars";
 import Link from "next/link";
+import FollowButton from "./FollowButton";
+import { getIsFollowing } from "../lib/repositories/userRepositories";
 
 type UserProps = {
   id: string;
@@ -7,7 +9,8 @@ type UserProps = {
   createdAt: Date;
 }
 
-export default function UserCard({user,isOwner}: {user: UserProps; isOwner: boolean}) {
+export default async function UserCard({user,isOwner}: {user: UserProps; isOwner: boolean}) {
+  const isFollowing = await getIsFollowing(user.id);
   return (
     <div className="border p-4 rounded shadow bg-gray-300 flex flex-col items-center">
       <Avatar name="Mary Edwards" size={80} variant="beam"/>
@@ -18,9 +21,7 @@ export default function UserCard({user,isOwner}: {user: UserProps; isOwner: bool
           <Link href={`/users/${user.id}/edit`}>Edit</Link>
         </button>
       ) : (
-        <button className="mt-4 px-4 py-1 bg-sky-500 text-white rounded-full hover:bg-sky-600">
-          Follow
-        </button>
+        <FollowButton targetUserId={user.id} initialIsFollowing={isFollowing} />
       )}
 
     </div>

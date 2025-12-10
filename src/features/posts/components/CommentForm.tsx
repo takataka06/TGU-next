@@ -27,7 +27,7 @@ export default function CommentForm({ postId }: { postId: string }) {
       // 現在のページを再取得して、コメント一覧を更新する
       router.refresh();
     } catch (error) {
-      alert('コメントできませんでした');
+      alert(error);
     } finally {
       setIsSubmitting(false);
     }
