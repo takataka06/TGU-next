@@ -7,10 +7,11 @@ import { signIn } from '@/auth';
 import { redirect } from 'next/navigation';
 import { setFlash } from '@/lib/flash-toaster';
 import { revalidatePath } from 'next/cache';
+import { ZodError } from 'zod';
 
 type ActionState = {
   success: boolean;
-  errors: Record<string, string[]>;
+  errors: Record<string, string[] | undefined>;
 };
 
 export async function createUser(prevState: ActionState, formData: FormData): Promise<ActionState> {
@@ -65,7 +66,7 @@ export async function createUser(prevState: ActionState, formData: FormData): Pr
 }
 
 //バリデーションエラー処理
-function handleValidationErrors(error: any): ActionState {
+function handleValidationErrors(error: ZodError): ActionState {
   // fieldErrorsは各フィールドごとのエラー、formErrorsはフォーム全体のエラー
   const { fieldErrors, formErrors } = error.flatten();
   // zodの仕様でパスワード一致エラーはformErrorsに入るため、手動でfieldErrorsに追加

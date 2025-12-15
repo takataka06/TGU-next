@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/prisma";
-import { auth } from "@/auth"; 
+import { prisma } from '@/lib/prisma';
+import { auth } from '@/auth';
 
 // 特定のユーザー(targetUserId)を、自分がフォローしているか調べる関数
 export async function getIsFollowing(targetUserId: string) {
@@ -19,5 +19,5 @@ export async function getIsFollowing(targetUserId: string) {
   });
 
   // レコードが見つかれば true (フォロー中)、なければ false
-  return !!follow; 
+  return !!follow;
 }

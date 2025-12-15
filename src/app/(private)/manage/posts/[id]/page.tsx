@@ -5,7 +5,7 @@ import { auth } from '@/auth';
 import CommentSection from '@/features/posts/components/CommentSection';
 import { getComments } from '@/features/posts/lib/getComments';
 import CommentForm from '@/features/posts/components/CommentForm';
-import  Link  from 'next/link';
+import Link from 'next/link';
 
 type Params = {
   // paramsは非同期に取得されるので Promise 型にしている
@@ -29,8 +29,8 @@ export default async function PostDetailPage({ params }: Params) {
       <h1 className="text-3xl font-bold">{post.title}</h1>
       <div className="mx-auto mb-4 flex items-center justify-between">
         <p className="text-muted-foreground text-sm">
-          <Link href={`/users/${post.authorId}`} className='hover:underline hover:text-blue-500'>
-          {post.author.name}・{new Date(post.createdAt).toLocaleDateString('ja-JP')}
+          <Link href={`/users/${post.authorId}`} className="hover:text-blue-500 hover:underline">
+            {post.author.name}・{new Date(post.createdAt).toLocaleDateString('ja-JP')}
           </Link>
         </p>
         {post.authorId === userId && <PostSetting postId={post.id} />}
@@ -39,9 +39,8 @@ export default async function PostDetailPage({ params }: Params) {
       <section>
         <p className="leading-relaxed whitespace-pre-wrap">{post.content}</p>
       </section>
-      <CommentSection comments={comments} currentUserId={session?.user?.id}/>
+      <CommentSection comments={comments} currentUserId={session?.user?.id} />
       <CommentForm postId={post.id} />
-
     </div>
   );
 }
