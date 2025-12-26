@@ -9,13 +9,9 @@ on:
   # 手動実行も可能にする
   workflow_dispatch:
 
-# 環境変数を設定
-env:
-  DOCKER_IMAGE_TAG: 'tgu-next-app' # イメージ名をプロジェクトに合わせて変更
-
 # ジョブ定義
 jobs:
-  # ジョブ名
+  # リントチェックジョブ
   frontend_lint_check:
     runs-on: ubuntu-latest
     strategy:
@@ -33,7 +29,7 @@ jobs:
 
       # Node.jsのセットアップ
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           # 利用したいNode.jsバージョンを指定
           node-version: ${{ matrix.node-version }}
@@ -46,35 +42,51 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      # ReviewdogをESLintで実行
-      - name: Run ESLint Reviewdog
-        uses: reviewdog/action-eslint@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-review
-          eslint_flags: 'src/**/*.{ts,tsx}'
-          # ルート直下なので指定不要（または . ）
-          workdir: .
+      # ESLintを実行
+      - name: Run ESLint
+        run: npm run lint
 
+      # TypeScriptの型チェックを実行
+      - name: Run TypeScript Type Check
+        run: npx tsc --noEmit
+
+  # ビルドチェックジョブ
   frontend_build_check:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.10.0]
     steps:
       # リポジトリからソースコードの取得
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Dockerのコンテナイメージをビルド
-      # ルート直下のDockerfileを使用
-      - name: Docker Image Build
-        run: |
-          docker build -f Dockerfile -t ${{ env.DOCKER_IMAGE_TAG }} .
-
-      # Dockleで脆弱性検査を行う
-      - name: Run Dockle
-        uses: erzz/dockle-action@v1
+      # Node.jsのセットアップ
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
         with:
-          image: ${{ env.DOCKER_IMAGE_TAG }}
-          exit-code: 1
-          failure-threshold: fatal
-          # .dockleignoreファイルがある場合は指定可能
-          # accept-key: KEY_TO_IGNORE
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: ./package-lock.json
+
+      # プロジェクトの依存関係をインストール
+      - name: Install Dependencies
+        run: npm ci
+
+      # Prismaクライアントを生成（ビルドに必要）
+      - name: Generate Prisma Client
+        run: npx prisma generate
+        env:
+          # ビルド時はダミーのDATABASE_URLでOK（実際の接続は不要）
+          DATABASE_URL: 'postgresql://dummy:dummy@localhost:5432/dummy'
+
+      # Next.jsのビルドを実行
+      - name: Build Next.js Application
+        run: npm run build
+        env:
+          # ビルドに必要な環境変数（ダミー値でOK）
+          DATABASE_URL: 'postgresql://dummy:dummy@localhost:5432/dummy'
+          AUTH_SECRET: 'dummy-secret-for-ci-build-only'
+          AUTH_URL: 'http://localhost:3000'
+          NEXT_PUBLIC_SUPABASE_URL: 'https://dummy.supabase.co'
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: 'dummy-key'
