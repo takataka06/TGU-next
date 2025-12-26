@@ -34,7 +34,6 @@ https://tgu-next.vercel.app/
 
 ## 4.DB設計・ER図
 
-準備中....
 ER図
 
 <img width="667" height="423" alt="Image" src="https://github.com/user-attachments/assets/298db3c6-92d0-437f-a1f2-f1e7f3611d36" />
@@ -60,7 +59,7 @@ ER図
 - Bullet-proofを用いたディレクトリ設計
 - エラーハンドリングの一元管理と適切なエラーメッセージ
 - 認証チェックの共通化によるセキュリティ向上
-- 環境変数の検証による設定ミスの早期検出
+- GitHub Actionsを使ったCI/CD構築(リントチェック、ビルドチェック)
 
 ## 8. コード品質への取り組み
 
