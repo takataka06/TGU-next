@@ -8,61 +8,73 @@ import { redirect } from 'next/navigation';
 import { setFlash } from '@/lib/flash-toaster';
 import { revalidatePath } from 'next/cache';
 import { ZodError } from 'zod';
+import { ERROR_MESSAGES } from '@/lib/constants/error-messages';
+import { SUCCESS_MESSAGES } from '@/lib/constants/success-messages';
 
 type ActionState = {
   success: boolean;
   errors: Record<string, string[] | undefined>;
 };
 
+/**
+ * 新規ユーザーを作成するServer Action
+ * バリデーション、重複チェック、エラーハンドリングを適切に実装
+ */
 export async function createUser(prevState: ActionState, formData: FormData): Promise<ActionState> {
-  //フォームから送信されたデータを取得
-  const rawFormData = Object.fromEntries(
-    ['name', 'email', 'password', 'confirmPassword'].map((field) => [
-      field,
-      formData.get(field) as string,
-    ]),
-  ) as Record<string, string>; // キーと値は両方string型
+  try {
+    //フォームから送信されたデータを取得
+    const rawFormData = Object.fromEntries(
+      ['name', 'email', 'password', 'confirmPassword'].map((field) => [
+        field,
+        formData.get(field) as string,
+      ]),
+    ) as Record<string, string>; // キーと値は両方string型
 
-  //バリデーション
-  const validationResult = registerSchema.safeParse(rawFormData);
-  console.log('rawFormData:', rawFormData);
+    //バリデーション
+    const validationResult = registerSchema.safeParse(rawFormData);
 
-  if (!validationResult.success) {
-    return handleValidationErrors(validationResult.error);
+    if (!validationResult.success) {
+      return handleValidationErrors(validationResult.error);
+    }
+
+    //DBにメールアドレスが保存されているか確認
+    const existingUser = await prisma.user.findUnique({
+      where: { email: rawFormData.email },
+    });
+    if (existingUser) {
+      return handleError({ email: [ERROR_MESSAGES.USER.EMAIL_ALREADY_EXISTS] });
+    }
+
+    //DBに保存
+    const hashedPassword = await bcryptjs.hash(rawFormData.password, 12);
+    await prisma.user.create({
+      data: {
+        name: rawFormData.name,
+        email: rawFormData.email,
+        password: hashedPassword,
+      },
+    });
+
+    //dashboardにリダイレクト
+    await signIn('credentials', {
+      // フォームの値を JavaScript の普通のオブジェクトに変換して渡す
+      ...Object.fromEntries(formData),
+      redirect: false,
+    });
+
+    // フラッシュメッセージをセット（定数を使用）
+    await setFlash({
+      type: 'success',
+      message: SUCCESS_MESSAGES.USER.CREATED,
+    });
+    revalidatePath('/dashboard');
+
+    redirect('/dashboard');
+  } catch (error) {
+    // 予期しないエラーを適切に処理
+    console.error('ユーザー作成エラー:', error);
+    return handleError({ _form: [ERROR_MESSAGES.USER.CREATE_FAILED] });
   }
-
-  //DBにメールアドレスが保存されているか確認
-  const existingUser = await prisma.user.findUnique({
-    where: { email: rawFormData.email },
-  });
-  if (existingUser) {
-    return handleError({ email: ['このメールアドレスは既に使用されています。'] });
-  }
-  //DBに保存
-  const hashedPassword = await bcryptjs.hash(rawFormData.password, 12);
-  await prisma.user.create({
-    data: {
-      name: rawFormData.name,
-      email: rawFormData.email,
-      password: hashedPassword,
-    },
-  });
-
-  //dashboardにリダイレクト
-  await signIn('credentials', {
-    // フォームの値を JavaScript の普通のオブジェクトに変換して渡す
-    ...Object.fromEntries(formData),
-    redirect: false,
-  });
-
-  // フラッシュメッセージをセット
-  await setFlash({
-    type: 'success',
-    message: 'アカウントを作成しました。',
-  });
-  revalidatePath('/dashboard');
-
-  redirect('/dashboard');
 }
 
 //バリデーションエラー処理

@@ -3,12 +3,17 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
+import { ERROR_MESSAGES } from '@/lib/constants/error-messages';
 
 // バリデーション: 相手のIDだけ送られてくればOK
 const followSchema = z.object({
   targetUserId: z.string(),
 });
 
+/**
+ * フォロー/アンフォローをトグルするAPIエンドポイント
+ * 認証チェック、バリデーション、エラーハンドリングを適切に実装
+ */
 export async function POST(req: Request) {
   try {
     // 1. 認証チェック (誰が？)
@@ -16,7 +21,7 @@ export async function POST(req: Request) {
     const currentUserId = session?.user?.id;
 
     if (!currentUserId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: ERROR_MESSAGES.AUTH.UNAUTHORIZED }, { status: 401 });
     }
 
     // 2. データ受け取り (誰を？)
@@ -25,7 +30,10 @@ export async function POST(req: Request) {
 
     // 【安全策】自分自身をフォローできないようにする
     if (currentUserId === targetUserId) {
-      return NextResponse.json({ error: '自分はフォローできません' }, { status: 400 });
+      return NextResponse.json(
+        { error: ERROR_MESSAGES.FOLLOW.CANNOT_FOLLOW_SELF },
+        { status: 400 },
+      );
     }
 
     // 3. 現状確認: 「すでにフォロー関係はあるか？」
@@ -65,7 +73,19 @@ export async function POST(req: Request) {
       return NextResponse.json({ isFollowing: true });
     }
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: 'Server Error' }, { status: 500 });
+    // Zodバリデーションエラーの処理
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        {
+          error: ERROR_MESSAGES.VALIDATION.INVALID_FORMAT,
+          details: error.flatten().fieldErrors,
+        },
+        { status: 400 },
+      );
+    }
+
+    // 予期しないエラーの処理
+    console.error('フォロー操作エラー:', error);
+    return NextResponse.json({ error: ERROR_MESSAGES.FOLLOW.FAILED }, { status: 500 });
   }
 }
