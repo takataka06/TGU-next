@@ -36,7 +36,7 @@ jobs:
 
       # Docker ComposeでPostgreSQLを起動
       - name: Start PostgreSQL with Docker Compose
-        run: docker-compose up -d postgres
+        run: docker compose up -d
 
       # PostgreSQLが起動するまで待機
       - name: Wait for PostgreSQL to be ready
