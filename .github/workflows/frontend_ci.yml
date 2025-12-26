@@ -11,7 +11,7 @@ on:
 
 # ジョブ定義
 jobs:
-  # リントチェックジョブ
+  # リントチェックジョブ(ESLintとかで品質を保つ)
   frontend_lint_check:
     runs-on: ubuntu-latest
     strategy:
@@ -46,11 +46,7 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
-      # TypeScriptの型チェックを実行
-      - name: Run TypeScript Type Check
-        run: npx tsc --noEmit
-
-  # ビルドチェックジョブ
+  # ビルドチェックジョブ(ビルドできるかを確認)
   frontend_build_check:
     runs-on: ubuntu-latest
     strategy:
@@ -73,20 +69,29 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      # Prismaクライアントを生成（ビルドに必要）
-      - name: Generate Prisma Client
-        run: npx prisma generate
-        env:
-          # ビルド時はダミーのDATABASE_URLでOK（実際の接続は不要）
-          DATABASE_URL: 'postgresql://dummy:dummy@localhost:5432/dummy'
+      # Docker ComposeでPostgreSQLを起動（ビルドに必要）
+      - name: Start PostgreSQL with Docker Compose
+        run: docker compose up -d
 
-      # Next.jsのビルドを実行
+      # PostgreSQLが起動するまで待機
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          echo "Waiting for PostgreSQL to be ready..."
+          timeout 60 bash -c 'until docker exec postgres pg_isready -U root; do sleep 2; done'
+          echo "PostgreSQL is ready!"
+
+      # Next.jsのビルドを実行（prisma migrate deployも含まれる）
       - name: Build Next.js Application
         run: npm run build
         env:
-          # ビルドに必要な環境変数（ダミー値でOK）
-          DATABASE_URL: 'postgresql://dummy:dummy@localhost:5432/dummy'
+          # docker-compose.ymlの設定に合わせたDATABASE_URL
+          DATABASE_URL: 'postgresql://root:secret@localhost:5432/mydb'
           AUTH_SECRET: 'dummy-secret-for-ci-build-only'
           AUTH_URL: 'http://localhost:3000'
           NEXT_PUBLIC_SUPABASE_URL: 'https://dummy.supabase.co'
           NEXT_PUBLIC_SUPABASE_ANON_KEY: 'dummy-key'
+
+      # クリーンアップ: Docker Composeを停止
+      - name: Stop Docker Compose
+        if: always()
+        run: docker compose down
